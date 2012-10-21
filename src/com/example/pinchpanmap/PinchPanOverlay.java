@@ -12,15 +12,11 @@ import com.google.android.maps.Overlay;
 
 public class PinchPanOverlay extends Overlay {
 
-	private Point   mOneFingerPanStart;
-
+    private Point   mOneFingerPanStart;
     private Point   mTwoFingerPanFirstPoint;
     private Point   mTwoFingerPanSecondPoint;
-
     private Point   mLastPinchCenter;
-
     private float   mCurrentDistanceSum = 0;
-
     private Handler mHandler            = new Handler();
 
     @Override
@@ -126,7 +122,7 @@ public class PinchPanOverlay extends Overlay {
         return true;
     }
 
-    private boolean pan(MapView mapView, Point startPoint, Point newPoint) {
+    private void pan(MapView mapView, Point startPoint, Point newPoint) {
         if (mOneFingerPanStart.x >= 0 && mOneFingerPanStart.y >= 0) {
             GeoPoint mapCenter = mapView.getMapCenter();
             GeoPoint panToCenter = new GeoPoint(
@@ -135,19 +131,10 @@ public class PinchPanOverlay extends Overlay {
             mapView.getController().setCenter(panToCenter);
         }
         mOneFingerPanStart = new Point(newPoint.x, newPoint.y);
-        return true;
     }
 
     private float computeEuclideanDistanceBetween(Point first, Point second) {
-        return computeEuclideanDistanceBetween(first.x, first.y, second.x, second.y);
-    }
-
-    private float computeEuclideanDistanceBetween(float x1, float y1, float x2, float y2) {
-        return FloatMath.sqrt((float) (Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
-    }
-
-    private Point getCenterPoint(float x1, float y1, float x2, float y2) {
-        return new Point((int)((x1 + x2) / 2), (int)((y1 + y2) / 2));
+        return FloatMath.sqrt((float) (Math.pow(second.x - first.x, 2) + Math.pow(second.y - first.y, 2)));
     }
     
     private Point getCenterPoint(Point p1, Point p2) {
